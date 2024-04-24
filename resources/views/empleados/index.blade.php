@@ -40,6 +40,24 @@
 <script src="https://cdn.datatables.net/2.0.5/js/dataTables.min.js" ></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script>
+    $(document).ready(function() {
+        Swal.fire("SweetAlert2 is working!");
+        ws();
+    });
 
+     function ws(){
+        $.ajax({
+            url : "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno?token=ee21c3b0e6c564aa47aba4519bd515d68eb42559be293ebfd3104b6dd72fd770",
+            jsonp : "callback",
+            dataType : "jsonp", //Se utiliza JSONP para realizar la consulta cross-site
+            success : function(response) {
+                console.log(response.bmx.series[0].datos[0].dato);
+            }
+        });
+    }
+
+
+</script>
 
 @endsection
