@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Empleado;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class EmpleadoController extends Controller
 {
@@ -21,7 +22,7 @@ class EmpleadoController extends Controller
      */
     public function create()
     {
-        //
+        return view('empleados.create');
     }
 
     /**
@@ -29,7 +30,34 @@ class EmpleadoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'codigo' => 'required|unique:empleados',
+            'nombre' => 'required',
+            'salarioP' => 'required|numeric',
+            'salarioD' => 'required|numeric',
+            'estado' => 'required',
+            'ciudad' => 'required',
+            'direccion' => 'required',
+            'celular' => 'required',
+            'correo' => 'required|email',
+        ]);
+
+        Empleado::create([
+            'codigo' => $request->codigo,
+            'nombre' => $request->nombre,
+            'salarioPesos' => $request->salarioP,
+            'salarioDolares' => $request->salarioD,
+            'estado' => $request->estado,
+            'ciudad' => $request->ciudad,
+            'direccion' => $request->direccion,
+            'celular' => $request->celular,
+            'correo' => $request->correo,
+        ]);
+
+        // Redirige de vuelta con un mensaje de éxito
+        return redirect()->route('empleados.index')->with('success', 'Empleado creado correctamente.');
+
+
     }
 
     /**

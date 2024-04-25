@@ -5,6 +5,11 @@
 
 
 <div class="container">
+    @if (session('success'))
+        <div id="success-message" class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
     <div class="row">
         <div class="col">
             <div class="d-flex justify-content-between align-items-center">
@@ -69,6 +74,10 @@
     function eliminar(id){
         console.log(1)
     }
+
+    setTimeout(function() {
+        document.getElementById('success-message').style.display = 'none';
+    }, 3000); // 5000 milisegundos = 5 segundos
 
 </script>
 
