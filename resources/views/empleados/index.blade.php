@@ -43,7 +43,7 @@
                         <td>{{ $empleado->correo }}</td>
                         <td>
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                                <input class="form-check-input" type="checkbox" onclick="estatus({{ $empleado->id }})" role="switch" id="flexSwitchCheckChecked{{$empleado->id}}" @if($empleado->activo == 1) checked @endif  />
                             </div>
                         </td>
                         <td>
@@ -104,6 +104,26 @@
             },
         });
     });
+
+    function estatus(id){
+        var checkbox = document.getElementById('flexSwitchCheckChecked'+id);
+        var isChecked = checkbox.checked ? 1 : 0;
+
+        $.ajax({
+            url: '/actualizar-estatus/' + id,
+            type: 'PUT',
+            data: { estatus: isChecked },
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                console.log('El estatus se actualizó correctamente');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error al actualizar el estatus:', error);
+            }
+        });
+    }
 
 
     function eliminar(id, nombre){

@@ -25,3 +25,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Route::put('/actualizar-estatus/{id}', 'EmpleadoController@actualizarEstatus');
+Route::put('/actualizar-estatus/{id}', 'App\Http\Controllers\EmpleadoController@actualizarEstatus');
+
+

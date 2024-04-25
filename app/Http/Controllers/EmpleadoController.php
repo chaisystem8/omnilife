@@ -151,4 +151,14 @@ class EmpleadoController extends Controller
         return redirect()->route('empleados.index')->with('success', 'Empleado eliminado correctamente.');
 
     }
+
+    public function actualizarEstatus($id, Request $request)
+    {
+
+        $empleado = Empleado::findOrFail($id);
+        $empleado->activo = $request->estatus;
+        $empleado->save();
+
+        return response()->json(['message' => 'Estatus actualizado correctamente'], 200);
+    }
 }
