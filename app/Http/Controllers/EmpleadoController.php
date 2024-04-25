@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Empleado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -65,7 +66,33 @@ class EmpleadoController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $empleado = Empleado::where('id',$id)->first();
+        $mesActual = Carbon::now()->startOfMonth();
+        $salarioInicial = $empleado->salarioPesos;
+        $salarioInicialD = $empleado->salarioDolares;
+        $proyeccionSalario = [];
+
+        for ($i = 0; $i < 6; $i++) {
+            $mesActual->addMonth();
+
+            $incremento = $salarioInicial * (($i + 1) * 2 / 100);
+            $salarioProyectado = $salarioInicial + $incremento;
+
+            $incrementoD = $salarioInicialD * (($i + 1) * 2 / 100);
+            $salarioProyectadoD = $salarioInicialD + $incrementoD;
+
+            $proyeccionSalario[] = [
+                'mes' => $mesActual->format('F Y'), // Nombre del mes y año
+                'salarioP' => $salarioProyectado,
+                'salarioD' => $salarioProyectadoD,
+            ];
+
+        }
+
+        return [
+            'proyeccionSalario' => $proyeccionSalario,
+            'empleado' => $empleado,
+        ];
     }
 
     /**
