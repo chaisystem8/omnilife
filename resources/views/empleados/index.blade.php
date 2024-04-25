@@ -6,8 +6,9 @@
 
 <div class="container">
     @if (session('success'))
-        <div id="success-message" class="alert alert-success" role="alert">
+        <div id="success-message" class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
     <div class="row">
@@ -48,7 +49,7 @@
                         <td>
                             <a class="btn btn-primary" href="{{ route('empleados.edit', $empleado->id)}}"><span class="glyphicon glyphicon-pencil"></span> Editar</a>
                             <a class="btn btn-secondary" onclick="eliminar({{ $empleado->id }})"> Detalle </a>
-                            <a class="btn btn-danger" onclick="eliminar({{ $empleado->id }})"> Eliminar </a>
+                            <a class="btn btn-danger" onclick="eliminar('{{ $empleado->id }}', '{{ $empleado->nombre }}')"> Eliminar </a>
                         </td>
                     </tr>
                     @endforeach
@@ -56,6 +57,8 @@
             </table>
         </div>
     </div>
+
+    <form id="deleteForm" action="" method="POST" style="display: none;"> @csrf @method('DELETE') </form>
 
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -71,13 +74,26 @@
         });
     });
 
-    function eliminar(id){
-        console.log(1)
+
+    function eliminar(id, nombre){
+        Swal.fire({
+            title: `¿Estás seguro de borrar al empleado ${nombre}?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (result.isConfirmed) {
+                    const formAction = `/empleados/${id}`;
+                    $('#deleteForm').attr('action', formAction);
+                    $('#deleteForm').submit();
+                }
+            }
+        });
     }
 
-    setTimeout(function() {
-        document.getElementById('success-message').style.display = 'none';
-    }, 3000); // 5000 milisegundos = 5 segundos
 
 </script>
 
