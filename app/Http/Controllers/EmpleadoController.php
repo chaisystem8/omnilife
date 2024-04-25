@@ -73,7 +73,8 @@ class EmpleadoController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $empleado = Empleado::where('id',$id)->first();
+        return view('empleados.edit', ['empleado' => $empleado]);
     }
 
     /**
@@ -81,7 +82,36 @@ class EmpleadoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'codigo' => 'required|unique:empleados,codigo,' . $id,
+            'nombre' => 'required',
+            'salarioP' => 'required|numeric',
+            'salarioD' => 'required|numeric',
+            'estado' => 'required',
+            'ciudad' => 'required',
+            'direccion' => 'required',
+            'celular' => 'required',
+            'correo' => 'required|email',
+        ]);
+
+        $empleado = Empleado::find($id);
+
+        if ($empleado) {
+            $empleado->update([
+                'codigo' => $request->codigo,
+                'nombre' => $request->nombre,
+                'salarioPesos' => $request->salarioP,
+                'salarioDolares' => $request->salarioD,
+                'estado' => $request->estado,
+                'ciudad' => $request->ciudad,
+                'direccion' => $request->direccion,
+                'celular' => $request->celular,
+                'correo' => $request->correo,
+            ]);
+            return redirect()->route('empleados.index')->with('success', 'Empleado actualizado correctamente.');
+        } else {
+            return redirect()->route('empleados.index')->with('error', 'El empleado no existe.');
+        }
     }
 
     /**
