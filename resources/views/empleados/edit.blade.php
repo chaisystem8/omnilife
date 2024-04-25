@@ -18,6 +18,7 @@
                     @method('PUT')
                     <div class="form-group">
                         <label for="codigo">Código</label>
+                        <input type="hidden" value="{{$empleado->codigo}}" id="codigoAux">
                         <input class="form-control" type="text" name="codigo" id="codigo" value="{{$empleado->codigo}}" required>
                         <div id="msg"></div>
 
@@ -72,6 +73,7 @@
     $(document).ready(function() {
         const salarioDolares = 0;
         $("#btnSave").prop('disabled', false);
+
     });
 
      $("#salarioP").blur(function() {
@@ -79,7 +81,8 @@
     });
 
     $("#codigo").blur(function() {
-        if(this.value != ''){
+        let codigoAux = $("#codigoAux").val();
+    if (this.value != '' && this.value !== codigoAux) {
             $.ajax({
                 url : `/api/empleados/${this.value}`,
                 success : function(response) {
@@ -87,11 +90,12 @@
                         $("#btnSave").prop('disabled', true);
                         $("#msg").html('<span class="badge bg-danger">Codigo no disponible</span>')
                     }else{
-                        $("#btnSave").prop('disabled', false);
-                        $("#msg").html('<span class="badge bg-success">Codigo disponible</span>')
+                            $("#btnSave").prop('disabled', false);
+                            $("#msg").html('<span class="badge bg-success">Codigo disponible</span>')
                     }
                 }
             });
+
         }else{
             $("#msg").html('')
             $("#btnSave").prop('disabled', false);
